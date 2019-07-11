@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Email SMTP\n"
-"POT-Creation-Date: 2019-07-11 20:00+0200\n"
-"PO-Revision-Date: 2019-07-11 20:00+0200\n"
+"POT-Creation-Date: 2019-07-11 20:41+0200\n"
+"PO-Revision-Date: 2019-07-11 20:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_FR\n"
@@ -17,54 +17,54 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: email-smtp.php:66 email-smtp.php:67
+#: email-smtp.php:63 email-smtp.php:64
 msgid "Email &amp; SMTP"
 msgstr "Email &amp; SMTP"
 
-#: email-smtp.php:96
+#: email-smtp.php:93
 msgid "A plugin is overriding the configuration with these differences:"
 msgstr "Un plugin prend le pas sur la configuration avec ces différences :"
 
-#: email-smtp.php:112
+#: email-smtp.php:109
 #, php-format
 msgid "Parameters loaded from %s:"
 msgstr "Paramètres chargés depuis %s :"
 
-#: email-smtp.php:122
+#: email-smtp.php:119
 #, php-format
 msgid "No email configuration in %s."
 msgstr "Aucune configuration email dans %s."
 
-#: email-smtp.php:128 email-smtp.php:136
+#: email-smtp.php:125 email-smtp.php:133
 msgid "Current configuration:"
 msgstr "Configuration actuelle :"
 
-#: email-smtp.php:130
-#, fuzzy, php-format
+#: email-smtp.php:127
+#, php-format
 msgid "PHP %s function."
 msgstr "fonction %s de PHP."
 
-#: email-smtp.php:146
+#: email-smtp.php:143
 msgid "Send a test message:"
 msgstr "Envoyer un message de test :"
 
-#: email-smtp.php:150
+#: email-smtp.php:147
 msgid "Recipient:"
 msgstr "Destinataire :"
 
-#: email-smtp.php:159
+#: email-smtp.php:156
 msgid "Send"
 msgstr "Envoyer"
 
-#: email-smtp.php:186
+#: email-smtp.php:183
 msgid "Email / SMTP test message"
 msgstr "Message de test Email & SMTP"
 
-#: email-smtp.php:188
+#: email-smtp.php:185
 #, php-format
 msgid "Email sending from website %s is working."
 msgstr "L’envoi d’email depuis le site %s fonctionne."
 
-#: email-smtp.php:207
+#: email-smtp.php:204
 msgid "Test result:"
 msgstr "Résultat du test :"
