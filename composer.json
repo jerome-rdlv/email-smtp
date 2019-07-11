@@ -1,0 +1,15 @@
+{
+    "name": "jerome-rdlv/email-smtp",
+    "description": "Send emails using wp-config.php SMTP settings",
+    "type": "wordpress-muplugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jérôme Mulsant",
+            "email": "jerome@rue-de-la-vieille.fr"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    }
+}

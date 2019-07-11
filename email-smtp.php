@@ -1,0 +1,311 @@
+<?php
+
+/*
+Plugin Name: Email SMTP
+Description: Send emails using wp-config.php SMTP settings
+
+Example configuration:
+
+    define('EMAIL_SMTP_HOST', 'smtp.example.com');
+    define('EMAIL_SMTP_AUTH', true);
+    define('EMAIL_SMTP_USERNAME', 'username@example.com');
+    define('EMAIL_SMTP_PASSWORD', 'P@ssW0rd');
+    define('EMAIL_SMTP_SECURE', 'tls');
+    define('EMAIL_SMTP_PORT', '587');
+    define('EMAIL_FROM_EMAIL', 'contact@example.com');
+    define('EMAIL_FROM_NAME', 'Example');
+
+*/
+
+namespace Rdlv\WordPress;
+
+use PHPMailer;
+
+new EmailSmtp();
+
+class EmailSmtp
+{
+    const PHPMAILER_PROPERTIES = [
+        'Host'       => 'EMAIL_SMTP_HOST',
+        'SMTPAuth'   => 'EMAIL_SMTP_AUTH',
+        'Username'   => 'EMAIL_SMTP_USERNAME',
+        'Password'   => 'EMAIL_SMTP_PASSWORD',
+        'SMTPSecure' => 'EMAIL_SMTP_SECURE',
+        'Port'       => 'EMAIL_SMTP_PORT',
+    ];
+
+    public function __construct()
+    {
+        add_action('admin_menu', [$this, 'admin_menu']);
+        add_action('admin_action_email_smtp_test', [$this, 'email_test']);
+        add_action('phpmailer_init', [$this, 'phpmailer_init']);
+    }
+
+    /**
+     * Display plugin information page
+     */
+    public function admin_menu()
+    {
+        add_submenu_page(
+            'options-general.php',
+            'Configuration Email / SMTP',
+            'Email / SMTP',
+            'manage_options',
+            'smtp',
+            [$this, 'info_page']
+        );
+    }
+
+    public function info_page()
+    {
+        global $title;
+
+        $phpmailer = $this->get_phpmailer();
+
+        echo '<div class="wrap">';
+        echo '<h1>' . $title . '</h1>';
+
+        $test_output = get_site_transient('email_smtp_test_output');
+        delete_site_transient('email_smtp_test_output');
+        if (!empty($test_output)) {
+            echo $test_output;
+        }
+
+        $config = $this->get_mailer_configuration();
+
+        if (defined('EMAIL_SMTP_HOST')) {
+
+            if (!$this->check_phpmailer_configuration()) {
+                echo '<div class="notice notice-error">';
+                echo '<p>Un plugin prend actuellement le pas sur la configuration avec ces différences :</p>';
+
+                $diff = [];
+                foreach ($config as $key => $value) {
+                    if (!isset($phpmailer->{$key}) || $phpmailer->{$key} !== $value) {
+                        $diff[$key] = $phpmailer->{$key};
+                    }
+                }
+
+                $this->display_config($diff);
+                echo '</div>';
+            }
+
+            echo '<p>';
+            echo 'Paramètres chargés depuis <code>wp-config.php</code> :';
+            echo '</p>';
+
+            $this->display_config($config);
+
+        } else {
+            echo '<p>Aucune configuration email dans <code>wp-config.php</code>.</p>';
+            if ($phpmailer->Mailer !== 'smtp') {
+                echo '<p>Configuration actuelle : fonction <code>mail()</code> de PHP.</p>';
+            }
+            else {
+                echo '<p>Configuration actuelle :</p>';
+                $this->display_config(array_filter((array)$phpmailer));
+            }
+        }
+
+        // Test form
+        echo '<hr>';
+
+        echo '<form method="POST" action="' . admin_url('admin.php') . '">';
+        echo '<p>Envoyer un message de test :</p>';
+        echo '<p>';
+        echo '<input type="hidden" name="action" value="email_smtp_test">';
+        wp_nonce_field('email_smtp_test');
+        echo '<label for="email_smtp_to">Destinataire :</label>&nbsp;';
+        printf(
+            '<input type="email" class="regular-text" name="to" id="email_smtp_to" value="%s">&nbsp;',
+            isset($_REQUEST['to']) ? esc_attr($_REQUEST['to']) : ''
+        );
+        echo '</p>';
+        echo '<p>';
+        echo '<input type="submit" class="button button-primary" value="Envoyer">';
+        echo '</p>';
+        echo '</form>';
+
+        echo '</div>';
+    }
+
+    public function email_test()
+    {
+        if (!empty($_REQUEST['to']) && check_admin_referer('email_smtp_test')) {
+
+            // enable error display
+            $display_errors = ini_get('display_errors');
+            ini_set('display_errors', 1);
+            $error_reporting = error_reporting();
+            error_reporting(E_ALL);
+
+            ob_start();
+
+            add_action('phpmailer_init', function ($phpmailer) {
+                $phpmailer->SMTPDebug = 2;
+                $phpmailer->Timeout = 3;
+            });
+
+            $wp_mail_output = wp_mail(
+                $_REQUEST['to'],
+                'Email / SMTP test message',
+                sprintf(
+                    'L’envoi d’email fonctionne depuis le site %s.',
+                    get_home_url()
+                )
+            );
+
+            $output = ob_get_clean();
+
+            // disable error display
+            ini_set('display_errors', $display_errors);
+            error_reporting($error_reporting);
+
+            // Authentication obfuscation
+            $output = preg_replace_callback('/(334 .*?\n.*?: )([^\n:]+)/i', function ($m) {
+                return $m[1] . str_pad('', strlen($m[2]) * 3, '•');
+            }, $output);
+
+            set_site_transient('email_smtp_test_output', sprintf(
+                '<div class="notice notice-%s"><p>Résultat du test : <code>%s</code></p>%s</div>',
+                $wp_mail_output ? 'success' : 'error',
+                $wp_mail_output ? 'TRUE' : 'FALSE',
+                $output ? '<pre style="font-size:12px;">' . esc_html($output) . '</pre>' : ''
+            ));
+        }
+
+        wp_redirect($_SERVER['HTTP_REFERER']);
+        exit();
+    }
+
+    /**
+     * @param array $config
+     */
+    private function display_config($config)
+    {
+        echo '<table>';
+        
+        foreach (self::PHPMAILER_PROPERTIES as $key => $constant) {
+
+            if (!array_key_exists($key, $config)) {
+                continue;
+            }
+
+            $value = $config[$key];
+
+            // Password obfuscation
+            if (stripos($key, 'PASS') !== false
+                || defined('EMAIL_SMTP_PASSWORD') && EMAIL_SMTP_PASSWORD === $value) {
+                $value = str_pad('', strlen($value) * 3, '•');
+            }
+            printf(
+                '<tr>'
+                . '<th scope="row" style="text-align:left;padding:.1em 2em .1em 0;">%s</th>'
+                . '<td style="font-family:monospace;">%s</td>'
+                . '</tr>',
+                strtolower(preg_replace(
+                    ['/^EMAIL_/', '/_/'],
+                    ['', ' '],
+                    self::PHPMAILER_PROPERTIES[$key]
+                )),
+                $value
+            );
+        }
+        echo '</table>';
+    }
+
+    private function get_phpmailer()
+    {
+        global $phpmailer;
+
+        // (Re)create it, if it's gone missing
+        if (!($phpmailer instanceof PHPMailer)) {
+            require_once ABSPATH . WPINC . '/class-phpmailer.php';
+            require_once ABSPATH . WPINC . '/class-smtp.php';
+            $phpmailer = new PHPMailer(true);
+        }
+
+        /**
+         * This action is documented in wp-includes/pluggable.php:484
+         */
+        do_action_ref_array('phpmailer_init', array(&$phpmailer));
+
+        return $phpmailer;
+    }
+
+    /**
+     * Check that PHPMailer configuration is correctly overwritten
+     * @return True if configuration is correct, false otherwise
+     */
+    private function check_phpmailer_configuration()
+    {
+        if (!defined('EMAIL_SMTP_HOST')) {
+            return true;
+        }
+
+        $phpmailer = $this->get_phpmailer();
+
+        if ($phpmailer->Mailer !== 'smtp') {
+            return false;
+        }
+
+        foreach (self::PHPMAILER_PROPERTIES as $property => $constant) {
+            if (defined($constant)) {
+                if ($phpmailer->{$property} !== constant($constant)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private function get_mailer_configuration()
+    {
+        $config = [];
+
+        if (defined('EMAIL_FROM_EMAIL')) {
+            $config['From'] = EMAIL_FROM_EMAIL;
+            $config['Sender'] = EMAIL_FROM_EMAIL;
+        }
+
+        if (defined('EMAIL_FROM_NAME')) {
+            $config['FromName'] = EMAIL_FROM_NAME;
+        }
+
+        if (defined('EMAIL_SMTP_HOST')) {
+            $config['Mailer'] = 'smtp';
+
+            // set default from email and name if smtp is on
+            if (!defined('EMAIL_FROM_EMAIL')) {
+                $from_email = get_option('admin_email');
+                $config['From'] = $from_email;
+                $config['Sender'] = $from_email;
+            }
+
+            if (!defined('EMAIL_FROM_NAME')) {
+                $config['FromName'] = get_bloginfo('name');
+            }
+        }
+
+        /** @var PHPMailer $phpmailer */
+        foreach (self::PHPMAILER_PROPERTIES as $property => $constant) {
+            if (defined($constant)) {
+                $config[$property] = constant($constant);
+            }
+        }
+
+        return $config;
+    }
+
+    /**
+     * Overwrite PHPMailer configuration
+     */
+    public function phpmailer_init($phpmailer)
+    {
+        /** @var PHPMailer $phpmailer */
+        foreach ($this->get_mailer_configuration() as $property => $value) {
+            $phpmailer->{$property} = $value;
+        }
+    }
+}
