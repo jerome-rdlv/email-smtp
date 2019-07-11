@@ -2,9 +2,13 @@
 
 This WordPress plugin load SMTP configuration from `wp-config.php` constants.
 
-Additionnaly, it add an admin page under *Settings / Email / SMTP* that shows
-the actual configuration, alerts if a plugin is conflicting, and a form to
-test email sending.
+Additionnaly, it add an admin page under *Settings / Email & SMTP* that:
+
+ * shows the loaded configuration
+ * alerts if a plugin is conflicting
+ * shows an email sending test form
+
+The sending test displays the client - server SMTP exchange.
 
 ## Installation
 

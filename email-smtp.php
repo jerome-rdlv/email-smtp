@@ -1,21 +1,24 @@
 <?php
 
 /*
-Plugin Name: Email SMTP
-Description: Send emails using wp-config.php SMTP settings
-
-Example configuration:
-
-    define('EMAIL_SMTP_HOST', 'smtp.example.com');
-    define('EMAIL_SMTP_AUTH', true);
-    define('EMAIL_SMTP_USERNAME', 'username@example.com');
-    define('EMAIL_SMTP_PASSWORD', 'P@ssW0rd');
-    define('EMAIL_SMTP_SECURE', 'tls');
-    define('EMAIL_SMTP_PORT', '587');
-    define('EMAIL_FROM_EMAIL', 'contact@example.com');
-    define('EMAIL_FROM_NAME', 'Example');
-
-*/
+ * Plugin Name: Email SMTP
+ * Author: Jérôme Mulsant
+ * Author URI: https://rue-de-la-vieille.fr
+ * Description: Send emails using wp-config.php SMTP settings
+ * Text Domain: email-smtp
+ * Version: GIT
+ * 
+ * Example configuration:
+ * 
+ *     define('EMAIL_SMTP_HOST', 'smtp.example.com');
+ *     define('EMAIL_SMTP_AUTH', true);
+ *     define('EMAIL_SMTP_USERNAME', 'username@example.com');
+ *     define('EMAIL_SMTP_PASSWORD', 'P@ssW0rd');
+ *     define('EMAIL_SMTP_SECURE', 'tls');
+ *     define('EMAIL_SMTP_PORT', '587');
+ *     define('EMAIL_FROM_EMAIL', 'contact@example.com');
+ *     define('EMAIL_FROM_NAME', 'Example');
+ */
 
 namespace Rdlv\WordPress;
 
@@ -36,6 +39,15 @@ class EmailSmtp
 
     public function __construct()
     {
+        add_action('init', function () {
+            $relpath = basename(__DIR__) .'/lang';
+            if (strpos(__FILE__, WPMU_PLUGIN_DIR) === 0) {
+                load_muplugin_textdomain('email-smtp', $relpath);
+            } else {
+                load_plugin_textdomain('email-smtp', false, basename(__DIR__) .'/lang');
+            }
+        });
+
         add_action('admin_menu', [$this, 'admin_menu']);
         add_action('admin_action_email_smtp_test', [$this, 'email_test']);
         add_action('phpmailer_init', [$this, 'phpmailer_init']);
@@ -48,8 +60,8 @@ class EmailSmtp
     {
         add_submenu_page(
             'options-general.php',
-            'Configuration Email / SMTP',
-            'Email / SMTP',
+            __('Email &amp; SMTP', 'email-smtp'),
+            __('Email &amp; SMTP', 'email-smtp'),
             'manage_options',
             'smtp',
             [$this, 'info_page']
@@ -77,7 +89,9 @@ class EmailSmtp
 
             if (!$this->check_phpmailer_configuration()) {
                 echo '<div class="notice notice-error">';
-                echo '<p>Un plugin prend actuellement le pas sur la configuration avec ces différences :</p>';
+                echo '<p>';
+                esc_html_e('A plugin is overriding the configuration with these differences:', 'email-smtp');
+                echo '</p>';
 
                 $diff = [];
                 foreach ($config as $key => $value) {
@@ -85,24 +99,39 @@ class EmailSmtp
                         $diff[$key] = $phpmailer->{$key};
                     }
                 }
-
                 $this->display_config($diff);
+
                 echo '</div>';
             }
 
             echo '<p>';
-            echo 'Paramètres chargés depuis <code>wp-config.php</code> :';
+            echo sprintf(
+                __('Parameters loaded from %s:', 'email-smtp'),
+                '<code>wp-config.php</code>'
+            );
             echo '</p>';
 
             $this->display_config($config);
 
         } else {
-            echo '<p>Aucune configuration email dans <code>wp-config.php</code>.</p>';
+            echo '<p>';
+            echo sprintf(
+                __('No email configuration in %s.', 'email-smtp'),
+                '<code>wp-config.php</code>'
+            );
+            echo '</p>';
             if ($phpmailer->Mailer !== 'smtp') {
-                echo '<p>Configuration actuelle : fonction <code>mail()</code> de PHP.</p>';
-            }
-            else {
-                echo '<p>Configuration actuelle :</p>';
+                echo '<p>';
+                echo __('Current configuration:', 'email-smtp') . ' ';
+                echo sprintf(
+                    __('PHP %s function.', 'email-smtp'),
+                    '<code>mail()</code>'
+                );
+                echo '</p>';
+            } else {
+                echo '<p>';
+                echo __('Current configuration:', 'email-smtp');
+                echo '</p>';
                 $this->display_config(array_filter((array)$phpmailer));
             }
         }
@@ -111,18 +140,21 @@ class EmailSmtp
         echo '<hr>';
 
         echo '<form method="POST" action="' . admin_url('admin.php') . '">';
-        echo '<p>Envoyer un message de test :</p>';
+        echo '<p>' . __('Send a test message:', 'email-smtp') . '</p>';
         echo '<p>';
         echo '<input type="hidden" name="action" value="email_smtp_test">';
         wp_nonce_field('email_smtp_test');
-        echo '<label for="email_smtp_to">Destinataire :</label>&nbsp;';
+        echo '<label for="email_smtp_to">' . __('Recipient:', 'email-smtp') . '</label>&nbsp;';
         printf(
             '<input type="email" class="regular-text" name="to" id="email_smtp_to" value="%s">&nbsp;',
             isset($_REQUEST['to']) ? esc_attr($_REQUEST['to']) : ''
         );
         echo '</p>';
         echo '<p>';
-        echo '<input type="submit" class="button button-primary" value="Envoyer">';
+        echo sprintf(
+            '<input type="submit" class="button button-primary" value="%s">',
+            __('Send', 'email-smtp')
+        );
         echo '</p>';
         echo '</form>';
 
@@ -148,9 +180,9 @@ class EmailSmtp
 
             $wp_mail_output = wp_mail(
                 $_REQUEST['to'],
-                'Email / SMTP test message',
+                __('Email / SMTP test message', 'email-smtp'),
                 sprintf(
-                    'L’envoi d’email fonctionne depuis le site %s.',
+                    __('Email sending from website %s is working.', 'email-smtp'),
                     get_home_url()
                 )
             );
@@ -167,10 +199,11 @@ class EmailSmtp
             }, $output);
 
             set_site_transient('email_smtp_test_output', sprintf(
-                '<div class="notice notice-%s"><p>Résultat du test : <code>%s</code></p>%s</div>',
+                '<div class="notice notice-%s"><p>%s <code>%s</code></p>%s</div>',
                 $wp_mail_output ? 'success' : 'error',
+                __('Test result:', 'email-smtp'),
                 $wp_mail_output ? 'TRUE' : 'FALSE',
-                $output ? '<pre style="font-size:12px;">' . esc_html($output) . '</pre>' : ''
+                $output ? '<pre style="font-size:12px;white-space:pre-wrap;">' . esc_html($output) . '</pre>' : ''
             ));
         }
 
@@ -184,7 +217,7 @@ class EmailSmtp
     private function display_config($config)
     {
         echo '<table>';
-        
+
         foreach (self::PHPMAILER_PROPERTIES as $key => $constant) {
 
             if (!array_key_exists($key, $config)) {
