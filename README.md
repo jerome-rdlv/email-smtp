@@ -33,6 +33,6 @@ define('EMAIL_FROM_EMAIL', 'contact@example.com');
 define('EMAIL_FROM_NAME', 'Example');
 ```
 
-## Info page
+## Info page screenshot
 
-![screenshot.png]()
+![](screenshot.png)
