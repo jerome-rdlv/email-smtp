@@ -1,7 +1,8 @@
 <?php
 
-/*
+/**
  * Plugin Name: Email SMTP
+ * Plugin URI: https://github.com/jerome-rdlv/email-smtp
  * Author: Jérôme Mulsant
  * Author URI: https://rue-de-la-vieille.fr
  * Description: Send emails using wp-config.php SMTP settings
@@ -20,7 +21,7 @@
  *     define('EMAIL_FROM_NAME', 'Example');
  */
 
-namespace Rdlv\WordPress;
+namespace Rdlv\WordPress\EmailSmtp;
 
 use PHPMailer;
 
@@ -28,6 +29,8 @@ new EmailSmtp();
 
 class EmailSmtp
 {
+    const TEXTDOMAIN = 'email-smtp';
+    
     const PHPMAILER_PROPERTIES = [
         'Host'       => 'EMAIL_SMTP_HOST',
         'SMTPAuth'   => 'EMAIL_SMTP_AUTH',
@@ -39,18 +42,30 @@ class EmailSmtp
 
     public function __construct()
     {
-        add_action('init', function () {
-            $relpath = basename(__DIR__) .'/lang';
-            if (strpos(__FILE__, WPMU_PLUGIN_DIR) === 0) {
-                load_muplugin_textdomain('email-smtp', $relpath);
-            } else {
-                load_plugin_textdomain('email-smtp', false, basename(__DIR__) .'/lang');
-            }
-        });
-
+        add_action('plugins_loaded', [$this, 'load_text_domain']);
         add_action('admin_menu', [$this, 'admin_menu']);
         add_action('admin_action_email_smtp_test', [$this, 'email_test']);
         add_action('phpmailer_init', [$this, 'phpmailer_init']);
+    }
+
+    /**
+     * Load plugin text domain. This function allows the plugin to be
+     * installed anywhere, in plugins/ or in mu-plugins/ for example.
+     * @return bool
+     */
+    public function load_text_domain()
+    {
+        /** This filter is documented in wp-includes/l10n.php */
+        $locale = apply_filters( 'plugin_locale', determine_locale(), self::TEXTDOMAIN );
+        $mofile = self::TEXTDOMAIN . '-' . $locale . '.mo';
+
+        // Try to load from the languages directory first.
+        if( load_textdomain( self::TEXTDOMAIN, WP_LANG_DIR . '/plugins/' . $mofile ) ) {
+            return true;
+        }
+
+        // Load from plugin languages folder.
+        return load_textdomain(self::TEXTDOMAIN, __DIR__ . '/languages/' . $mofile);
     }
 
     /**
