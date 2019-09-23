@@ -1,20 +1,89 @@
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Custom scripts\n"
-"Last-Translator: Jérôme Mulsant\n"
+"Project-Id-Version: Email SMTP\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-09-23 14:34+0200\n"
+"Last-Translator: Jérôme Mulsant <jerome@rue-de-la-vieille.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
-"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
-"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;"
-"esc_html_x:1,2c\n"
+"X-Poedit-WPHeader: email-smtp.php\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Language-Team: \n"
-"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#. Name of the plugin/theme
+#: email-smtp.php
+msgid "Email SMTP"
+msgstr ""
+
+#. Author of the plugin/theme
+#: email-smtp.php
+msgid "Jérôme Mulsant"
+msgstr ""
+
+#. Description of the plugin/theme
+#: email-smtp.php
+msgid "Send emails using wp-config.php SMTP settings"
+msgstr ""
+
+#. URI of the plugin/theme
+#. Author URI of the plugin/theme
+#: email-smtp.php
+msgid "https://rue-de-la-vieille.fr"
+msgstr ""
+
+#: email-smtp.php:79 email-smtp.php:80
+msgid "Email &amp; SMTP"
+msgstr ""
+
+#: email-smtp.php:109
+msgid "A plugin is overriding the configuration with these differences:"
+msgstr ""
+
+#: email-smtp.php:125
+#, php-format
+msgid "Parameters loaded from %s:"
+msgstr ""
+
+#: email-smtp.php:135
+#, php-format
+msgid "No email configuration in %s."
+msgstr ""
+
+#: email-smtp.php:141 email-smtp.php:149
+msgid "Current configuration:"
+msgstr ""
+
+#: email-smtp.php:143
+#, php-format
+msgid "PHP %s function."
+msgstr ""
+
+#: email-smtp.php:159
+msgid "Send a test message:"
+msgstr ""
+
+#: email-smtp.php:163
+msgid "Recipient:"
+msgstr ""
+
+#: email-smtp.php:172
+msgid "Send"
+msgstr ""
+
+#: email-smtp.php:199
+msgid "Email / SMTP test message"
+msgstr ""
+
+#: email-smtp.php:201
+#, php-format
+msgid "Email sending from website %s is working."
+msgstr ""
+
+#: email-smtp.php:220
+msgid "Test result:"
+msgstr ""

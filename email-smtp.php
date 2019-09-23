@@ -2,11 +2,12 @@
 
 /**
  * Plugin Name: Email SMTP
- * Plugin URI: https://github.com/jerome-rdlv/email-smtp
+ * Plugin URI: https://rue-de-la-vieille.fr
  * Author: Jérôme Mulsant
  * Author URI: https://rue-de-la-vieille.fr
  * Description: Send emails using wp-config.php SMTP settings
  * Text Domain: email-smtp
+ * Domain Path: /languages
  * Version: GIT
  * 
  * Example configuration:
