@@ -9,9 +9,9 @@
  * Text Domain: email-smtp
  * Domain Path: /languages
  * Version: GIT
- * 
+ *
  * Example configuration:
- * 
+ *
  *     define('EMAIL_SMTP_HOST', 'smtp.example.com');
  *     define('EMAIL_SMTP_AUTH', true);
  *     define('EMAIL_SMTP_USERNAME', 'username@example.com');
@@ -31,7 +31,7 @@ new EmailSmtp();
 class EmailSmtp
 {
     const TEXTDOMAIN = 'email-smtp';
-    
+
     const PHPMAILER_PROPERTIES = [
         'Host'       => 'EMAIL_SMTP_HOST',
         'SMTPAuth'   => 'EMAIL_SMTP_AUTH',
@@ -57,11 +57,11 @@ class EmailSmtp
     public function load_text_domain()
     {
         /** This filter is documented in wp-includes/l10n.php */
-        $locale = apply_filters( 'plugin_locale', determine_locale(), self::TEXTDOMAIN );
+        $locale = apply_filters('plugin_locale', determine_locale(), self::TEXTDOMAIN);
         $mofile = self::TEXTDOMAIN . '-' . $locale . '.mo';
 
         // Try to load from the languages directory first.
-        if( load_textdomain( self::TEXTDOMAIN, WP_LANG_DIR . '/plugins/' . $mofile ) ) {
+        if (load_textdomain(self::TEXTDOMAIN, WP_LANG_DIR . '/plugins/' . $mofile)) {
             return true;
         }
 
@@ -122,6 +122,7 @@ class EmailSmtp
 
             echo '<p>';
             echo sprintf(
+            /* translators: Placeholder is a PHP file */
                 __('Parameters loaded from %s:', 'email-smtp'),
                 '<code>wp-config.php</code>'
             );
@@ -132,6 +133,7 @@ class EmailSmtp
         } else {
             echo '<p>';
             echo sprintf(
+            /* translators: Placeholder is a PHP file */
                 __('No email configuration in %s.', 'email-smtp'),
                 '<code>wp-config.php</code>'
             );
@@ -140,6 +142,7 @@ class EmailSmtp
                 echo '<p>';
                 echo __('Current configuration:', 'email-smtp') . ' ';
                 echo sprintf(
+                /* translators: Placeholder is a PHP function */
                     __('PHP %s function.', 'email-smtp'),
                     '<code>mail()</code>'
                 );
@@ -198,6 +201,7 @@ class EmailSmtp
                 $_REQUEST['to'],
                 __('Email / SMTP test message', 'email-smtp'),
                 sprintf(
+                /* translators: Placeholder is the website URL */
                     __('Email sending from website %s is working.', 'email-smtp'),
                     get_home_url()
                 )

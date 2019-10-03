@@ -11,5 +11,10 @@
     ],
     "require": {
         "php": ">=7.3"
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "wp i18n make-pot . languages/email-smtp.pot"
+        ]
     }
 }

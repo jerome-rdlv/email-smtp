@@ -1,27 +1,22 @@
+# Copyright (C) 2019 Jérôme Mulsant
+# This file is distributed under the same license as the Email SMTP plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Email SMTP\n"
+"Project-Id-Version: Email SMTP GIT\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/email-smtp\n"
-"POT-Creation-Date: 2019-10-03T11:19:22+02:00\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Jérôme Mulsant <jerome@rue-de-la-vieille.fr>\n"
-"Language-Team: \n"
-"Language: fr_FR\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-WPHeader: email-smtp.php\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.1\n"
-"X-Poedit-SearchPath-0: .\n"
+"POT-Creation-Date: 2019-10-03T11:19:22+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.2.0\n"
+"X-Domain: email-smtp\n"
 
 #. Plugin Name of the plugin
 msgid "Email SMTP"
-msgstr "Email &amp; SMTP"
+msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
@@ -30,60 +25,62 @@ msgstr ""
 
 #. Description of the plugin
 msgid "Send emails using wp-config.php SMTP settings"
-msgstr "Utilise les paramètres de wp-config.php pour l’envoi des emails"
+msgstr ""
 
 #. Author of the plugin
 msgid "Jérôme Mulsant"
 msgstr ""
 
-#: email-smtp.php:79 email-smtp.php:80
+#: email-smtp.php:79
+#: email-smtp.php:80
 msgid "Email &amp; SMTP"
-msgstr "Email &amp; SMTP"
+msgstr ""
 
 #: email-smtp.php:109
 msgid "A plugin is overriding the configuration with these differences:"
-msgstr "Un plugin prend le pas sur la configuration avec ces différences :"
+msgstr ""
 
 #. translators: Placeholder is a PHP file
 #: email-smtp.php:126
 msgid "Parameters loaded from %s:"
-msgstr "Paramètres chargés depuis %s :"
+msgstr ""
 
 #. translators: Placeholder is a PHP file
 #: email-smtp.php:137
 msgid "No email configuration in %s."
-msgstr "Aucune configuration email dans %s."
+msgstr ""
 
-#: email-smtp.php:143 email-smtp.php:152
+#: email-smtp.php:143
+#: email-smtp.php:152
 msgid "Current configuration:"
-msgstr "Configuration actuelle :"
+msgstr ""
 
 #. translators: Placeholder is a PHP function
 #: email-smtp.php:146
 msgid "PHP %s function."
-msgstr "fonction %s de PHP."
+msgstr ""
 
 #: email-smtp.php:162
 msgid "Send a test message:"
-msgstr "Envoyer un message de test :"
+msgstr ""
 
 #: email-smtp.php:166
 msgid "Recipient:"
-msgstr "Destinataire :"
+msgstr ""
 
 #: email-smtp.php:175
 msgid "Send"
-msgstr "Envoyer"
+msgstr ""
 
 #: email-smtp.php:202
 msgid "Email / SMTP test message"
-msgstr "Message de test Email & SMTP"
+msgstr ""
 
 #. translators: Placeholder is the website URL
 #: email-smtp.php:205
 msgid "Email sending from website %s is working."
-msgstr "L’envoi d’email depuis le site %s fonctionne."
+msgstr ""
 
 #: email-smtp.php:224
 msgid "Test result:"
-msgstr "Résultat du test :"
+msgstr ""
