@@ -101,7 +101,7 @@ class EmailSmtp
 
         $config = $this->get_mailer_configuration();
 
-        if (defined('EMAIL_SMTP_HOST')) {
+        if (defined('EMAIL_SMTP_HOST') && EMAIL_SMTP_HOST !== null) {
 
             if (!$this->check_phpmailer_configuration()) {
                 echo '<div class="notice notice-error">';
@@ -240,7 +240,7 @@ class EmailSmtp
 
         foreach (self::PHPMAILER_PROPERTIES as $key => $constant) {
 
-            if (!array_key_exists($key, $config)) {
+            if (!isset($config[$key])) {
                 continue;
             }
 
@@ -248,7 +248,7 @@ class EmailSmtp
 
             // Password obfuscation
             if (stripos($key, 'PASS') !== false
-                || defined('EMAIL_SMTP_PASSWORD') && EMAIL_SMTP_PASSWORD === $value) {
+                || (defined('EMAIL_SMTP_PASSWORD') && EMAIL_SMTP_PASSWORD === $value)) {
                 $value = str_pad('', strlen($value) * 3, '•');
             }
             printf(
@@ -292,7 +292,7 @@ class EmailSmtp
      */
     private function check_phpmailer_configuration()
     {
-        if (!defined('EMAIL_SMTP_HOST')) {
+        if (!defined('EMAIL_SMTP_HOST') || EMAIL_SMTP_HOST === null) {
             return true;
         }
 
@@ -317,33 +317,33 @@ class EmailSmtp
     {
         $config = [];
 
-        if (defined('EMAIL_FROM_EMAIL')) {
+        if (defined('EMAIL_FROM_EMAIL') && EMAIL_FROM_EMAIL !== null) {
             $config['From'] = EMAIL_FROM_EMAIL;
             $config['Sender'] = EMAIL_FROM_EMAIL;
         }
 
-        if (defined('EMAIL_FROM_NAME')) {
+        if (defined('EMAIL_FROM_NAME') && EMAIL_FROM_NAME !== null) {
             $config['FromName'] = EMAIL_FROM_NAME;
         }
 
-        if (defined('EMAIL_SMTP_HOST')) {
+        if (defined('EMAIL_SMTP_HOST') && EMAIL_SMTP_HOST !== null) {
             $config['Mailer'] = 'smtp';
 
             // set default from email and name if smtp is on
-            if (!defined('EMAIL_FROM_EMAIL')) {
+            if (!defined('EMAIL_FROM_EMAIL') || EMAIL_FROM_EMAIL === null) {
                 $from_email = get_option('admin_email');
                 $config['From'] = $from_email;
                 $config['Sender'] = $from_email;
             }
 
-            if (!defined('EMAIL_FROM_NAME')) {
+            if (!defined('EMAIL_FROM_NAME') || EMAIL_FROM_NAME === null) {
                 $config['FromName'] = get_bloginfo('name');
             }
         }
 
         /** @var PHPMailer $phpmailer */
         foreach (self::PHPMAILER_PROPERTIES as $property => $constant) {
-            if (defined($constant)) {
+            if (defined($constant) && constant($constant) !== null) {
                 $config[$property] = constant($constant);
             }
         }
