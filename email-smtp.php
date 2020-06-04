@@ -32,6 +32,8 @@ class EmailSmtp
 {
     const TEXTDOMAIN = 'email-smtp';
 
+    const SLUG = 'smtp';
+
     const PHPMAILER_PROPERTIES = [
         'Host'       => 'EMAIL_SMTP_HOST',
         'SMTPAuth'   => 'EMAIL_SMTP_AUTH',
@@ -79,7 +81,7 @@ class EmailSmtp
             __('Email &amp; SMTP', 'email-smtp'),
             __('Email &amp; SMTP', 'email-smtp'),
             'manage_options',
-            'smtp',
+            self::SLUG,
             [$this, 'info_page']
         );
     }
@@ -227,7 +229,7 @@ class EmailSmtp
             ));
         }
 
-        wp_redirect($_SERVER['HTTP_REFERER']);
+        wp_redirect(admin_url('options-general.php?page=' . self::SLUG));
         exit();
     }
 
