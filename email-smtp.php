@@ -24,7 +24,7 @@
 
 namespace Rdlv\WordPress\EmailSmtp;
 
-use PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 
 new EmailSmtp();
 
@@ -275,8 +275,8 @@ class EmailSmtp
 
         // (Re)create it, if it's gone missing
         if (!($phpmailer instanceof PHPMailer)) {
-            require_once ABSPATH . WPINC . '/class-phpmailer.php';
-            require_once ABSPATH . WPINC . '/class-smtp.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
             $phpmailer = new PHPMailer(true);
         }
 
