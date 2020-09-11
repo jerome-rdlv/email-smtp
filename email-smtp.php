@@ -77,7 +77,7 @@ class EmailSmtp
     public function admin_menu()
     {
         add_submenu_page(
-            'options-general.php',
+            'tools.php',
             __('Email &amp; SMTP', 'email-smtp'),
             __('Email &amp; SMTP', 'email-smtp'),
             'manage_options',
@@ -104,7 +104,6 @@ class EmailSmtp
         $config = $this->get_mailer_configuration();
 
         if (defined('EMAIL_SMTP_HOST') && EMAIL_SMTP_HOST !== null) {
-
             if (!$this->check_phpmailer_configuration()) {
                 echo '<div class="notice notice-error">';
                 echo '<p>';
@@ -131,7 +130,6 @@ class EmailSmtp
             echo '</p>';
 
             $this->display_config($config);
-
         } else {
             echo '<p>';
             echo sprintf(
@@ -185,7 +183,6 @@ class EmailSmtp
     public function email_test()
     {
         if (!empty($_REQUEST['to']) && check_admin_referer('email_smtp_test')) {
-
             // enable error display
             $display_errors = ini_get('display_errors');
             ini_set('display_errors', 1);
@@ -229,7 +226,7 @@ class EmailSmtp
             ));
         }
 
-        wp_redirect(admin_url('options-general.php?page=' . self::SLUG));
+        wp_redirect(admin_url('tools.php?page=' . self::SLUG));
         exit();
     }
 
@@ -241,7 +238,6 @@ class EmailSmtp
         echo '<table>';
 
         foreach (self::PHPMAILER_PROPERTIES as $key => $constant) {
-
             if (!isset($config[$key])) {
                 continue;
             }
@@ -259,10 +255,10 @@ class EmailSmtp
                 . '<td style="font-family:monospace;">%s</td>'
                 . '</tr>',
                 strtolower(preg_replace(
-                    ['/^EMAIL_/', '/_/'],
-                    ['', ' '],
-                    self::PHPMAILER_PROPERTIES[$key]
-                )),
+                               ['/^EMAIL_/', '/_/'],
+                               ['', ' '],
+                               self::PHPMAILER_PROPERTIES[$key]
+                           )),
                 $value
             );
         }
@@ -283,7 +279,7 @@ class EmailSmtp
         /**
          * This action is documented in wp-includes/pluggable.php:484
          */
-        do_action_ref_array('phpmailer_init', array(&$phpmailer));
+        do_action_ref_array('phpmailer_init', [&$phpmailer]);
 
         return $phpmailer;
     }
