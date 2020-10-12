@@ -49,6 +49,10 @@ class EmailSmtp
         add_action('admin_menu', [$this, 'admin_menu']);
         add_action('admin_action_email_smtp_test', [$this, 'email_test']);
         add_action('phpmailer_init', [$this, 'phpmailer_init']);
+
+        if (defined('EMAIL_FORCE_TO') && !empty(EMAIL_FORCE_TO)) {
+            add_filter('wp_mail', [$this, 'force_email_recipient']);
+        }
     }
 
     /**
@@ -358,5 +362,31 @@ class EmailSmtp
         foreach ($this->get_mailer_configuration() as $property => $value) {
             $phpmailer->{$property} = $value;
         }
+    }
+
+    public function force_email_recipient($args)
+    {
+        if (!defined('EMAIL_FORCE_TO') || empty(EMAIL_FORCE_TO)) {
+            return $args;
+        }
+       
+        if (isset($_POST['action']) && $_POST['action'] === 'email_smtp_test') {
+            return $args;
+        }
+
+        if (!array_key_exists('headers', $args)) {
+            $args['headers'] = '';
+        }
+
+        // save and replace original recipient
+        $args['headers'] .= sprintf("\nTo: %s", $args['to']);
+        $args['to'] = EMAIL_FORCE_TO;
+
+        // disable To, Cc, Bcc recipients
+        $args['headers'] = preg_replace_callback('/^(To|Cc|Bcc):/im', function ($m) {
+            return sprintf("X-DevRewrite-%s:", $m[1]);
+        }, $args['headers']);
+
+        return $args;
     }
 }
