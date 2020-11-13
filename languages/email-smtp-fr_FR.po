@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Email SMTP\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/email-smtp\n"
-"POT-Creation-Date: 2019-10-03T11:19:22+02:00\n"
+"POT-Creation-Date: 2020-11-13T17:11:45+01:00\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Jérôme Mulsant <jerome@rue-de-la-vieille.fr>\n"
 "Language-Team: \n"
@@ -13,10 +13,10 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: email-smtp.php\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #. Plugin Name of the plugin
@@ -36,54 +36,64 @@ msgstr "Utilise les paramètres de wp-config.php pour l’envoi des emails"
 msgid "Jérôme Mulsant"
 msgstr ""
 
-#: email-smtp.php:79 email-smtp.php:80
+#: email-smtp.php:85 email-smtp.php:86
 msgid "Email &amp; SMTP"
 msgstr "Email &amp; SMTP"
 
-#: email-smtp.php:109
+#: email-smtp.php:114
 msgid "A plugin is overriding the configuration with these differences:"
 msgstr "Un plugin prend le pas sur la configuration avec ces différences :"
 
 #. translators: Placeholder is a PHP file
-#: email-smtp.php:126
+#: email-smtp.php:131
 msgid "Parameters loaded from %s:"
 msgstr "Paramètres chargés depuis %s :"
 
 #. translators: Placeholder is a PHP file
-#: email-smtp.php:137
+#: email-smtp.php:141
 msgid "No email configuration in %s."
 msgstr "Aucune configuration email dans %s."
 
-#: email-smtp.php:143 email-smtp.php:152
+#: email-smtp.php:147 email-smtp.php:156
 msgid "Current configuration:"
 msgstr "Configuration actuelle :"
 
 #. translators: Placeholder is a PHP function
-#: email-smtp.php:146
+#: email-smtp.php:150
 msgid "PHP %s function."
 msgstr "fonction %s de PHP."
 
-#: email-smtp.php:162
+#. translators: %1$s is the defined constant, %2$s is the email address.
+#: email-smtp.php:167
+msgid ""
+"%1$s is defined: all outgoing messages except test messages will be send to "
+"%2$s with no other recipients, nor Cc or Bcc."
+msgstr ""
+"%1$s est définie : tous les messages sortants, à l’exception des messages "
+"de test, seront envoyés à %2$s sans aucuns autres destinataires, ni Cc ni "
+"Cci."
+
+#: email-smtp.php:181
 msgid "Send a test message:"
 msgstr "Envoyer un message de test :"
 
-#: email-smtp.php:166
+#: email-smtp.php:185
 msgid "Recipient:"
 msgstr "Destinataire :"
 
-#: email-smtp.php:175
+#: email-smtp.php:194
 msgid "Send"
 msgstr "Envoyer"
 
-#: email-smtp.php:202
+#: email-smtp.php:220
 msgid "Email / SMTP test message"
 msgstr "Message de test Email & SMTP"
 
 #. translators: Placeholder is the website URL
-#: email-smtp.php:205
+#: email-smtp.php:223
 msgid "Email sending from website %s is working."
 msgstr "L’envoi d’email depuis le site %s fonctionne."
 
-#: email-smtp.php:224
+#: email-smtp.php:242
 msgid "Test result:"
 msgstr "Résultat du test :"
