@@ -159,6 +159,21 @@ class EmailSmtp
             }
         }
 
+        if (defined('EMAIL_FORCE_TO') && !empty(EMAIL_FORCE_TO)) {
+            echo '<hr>';
+            echo '<p>';
+            printf(
+                // translators: %1$s is the defined constant, %2$s is the email address.
+                esc_html__(
+                    '%1$s is defined: all outgoing messages except test messages will be send to %2$s with no other recipients, nor Cc or Bcc.',
+                    'email-smtp'
+                ),
+                '<code>EMAIL_FORCE_TO</code>',
+                '<code>'. EMAIL_FORCE_TO .'</code>'
+            );
+            echo '</p>';
+        }
+
         // Test form
         echo '<hr>';
 
@@ -290,7 +305,7 @@ class EmailSmtp
 
     /**
      * Check that PHPMailer configuration is correctly overwritten
-     * @return True if configuration is correct, false otherwise
+     * @return boolean True if configuration is correct, false otherwise
      */
     private function check_phpmailer_configuration()
     {
@@ -369,7 +384,7 @@ class EmailSmtp
         if (!defined('EMAIL_FORCE_TO') || empty(EMAIL_FORCE_TO)) {
             return $args;
         }
-       
+
         if (isset($_POST['action']) && $_POST['action'] === 'email_smtp_test') {
             return $args;
         }
