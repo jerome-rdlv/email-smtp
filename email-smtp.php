@@ -379,12 +379,18 @@ class EmailSmtp
         }
 
         // save and replace original recipient
-        $args['headers'] .= sprintf("\nTo: %s", $args['to']);
+        $args['headers'] = preg_replace(
+            '/' . PHP_EOL . '+/',
+            PHP_EOL,
+            sprintf("%s\nTo: %s", $args['headers'], $args['to'])
+        );
         $args['to'] = EMAIL_FORCE_TO;
 
         // disable To, Cc, Bcc recipients
-        $args['headers'] = preg_replace_callback('/^(To|Cc|Bcc):/im', function ($m) {
-            return sprintf("X-DevRewrite-%s:", $m[1]);
+        $indexes = ['To' => 1, 'Cc' => 1, 'Bcc' => 1];
+        $args['headers'] = preg_replace_callback('/^(To|Cc|Bcc):/im', function ($m) use (&$indexes) {
+            $index = $indexes[$m[1]]++;
+            return sprintf("X-DevRewrite-%s:", $m[1] . ($index > 1 ? $index : ''));
         }, $args['headers']);
 
         return $args;
