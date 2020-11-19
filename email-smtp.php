@@ -163,13 +163,13 @@ class EmailSmtp
             echo '<hr>';
             echo '<p>';
             printf(
-                // translators: %1$s is the defined constant, %2$s is the email address.
+            // translators: %1$s is the defined constant, %2$s is the email address.
                 esc_html__(
                     '%1$s is defined: all outgoing messages except test messages will be send to %2$s with no other recipients, nor Cc or Bcc.',
                     'email-smtp'
                 ),
                 '<code>EMAIL_FORCE_TO</code>',
-                '<code>'. EMAIL_FORCE_TO .'</code>'
+                '<code>' . EMAIL_FORCE_TO . '</code>'
             );
             echo '</p>';
         }
@@ -389,23 +389,33 @@ class EmailSmtp
             return $args;
         }
 
-        if (!array_key_exists('headers', $args)) {
-            $args['headers'] = '';
+        if (!array_key_exists('to', $args)) {
+            $args['to'] = [];
+        }
+        if (!is_array($args['to'])) {
+            $args['to'] = explode(',', $args['to']);
         }
 
-        // save and replace original recipient
-        $args['headers'] = preg_replace(
-            '/' . PHP_EOL . '+/',
-            PHP_EOL,
-            sprintf("%s\nTo: %s", $args['headers'], $args['to'])
-        );
+        if (!array_key_exists('headers', $args)) {
+            $args['headers'] = [];
+        }
+        if (!is_array($args['headers'])) {
+            $args['headers'] = explode("\n", str_replace("\r\n", "\n", $args['headers']));
+        }
+
+        // move original recipients to headers and replace them
+        foreach ($args['to'] as $to) {
+            $args['headers'][] = 'To: ' . $to;
+        }
         $args['to'] = EMAIL_FORCE_TO;
 
-        // disable To, Cc, Bcc recipients
+        // disable To, Cc, Bcc recipients in headers
         $indexes = ['To' => 1, 'Cc' => 1, 'Bcc' => 1];
-        $args['headers'] = preg_replace_callback('/^(To|Cc|Bcc):/im', function ($m) use (&$indexes) {
-            $index = $indexes[$m[1]]++;
-            return sprintf("X-DevRewrite-%s:", $m[1] . ($index > 1 ? $index : ''));
+        $args['headers'] = array_map(function ($header) use (&$indexes) {
+            return preg_replace_callback('/^.*(To|Cc|Bcc):(.*)$/i', function ($m) use (&$indexes) {
+                $index = $indexes[$m[1]]++;
+                return sprintf("X-DevRewrite-%s:%s", $m[1] . ($index > 1 ? $index : ''), $m[2]);
+            }, $header);
         }, $args['headers']);
 
         return $args;
