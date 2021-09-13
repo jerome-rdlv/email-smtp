@@ -65,6 +65,7 @@ class EmailSmtp
         add_action('admin_menu', [$this, 'admin_menu']);
         add_action('admin_action_email_smtp_test', [$this, 'email_test']);
         add_action('phpmailer_init', [$this, 'phpmailer_init']);
+        add_filter('debug_information', [$this, 'debug_info']);
 
         if (defined('EMAIL_FORCE_TO') && !empty(EMAIL_FORCE_TO)) {
             add_filter('wp_mail', [$this, 'force_email_recipient']);
@@ -215,9 +216,13 @@ class EmailSmtp
             error_reporting($error_reporting);
 
             // Authentication obfuscation
-            $output = preg_replace_callback('/(334 .*?\n.*?: )([^\n:]+)/i', function ($m) {
-                return $m[1] . str_pad('', strlen($m[2]) * 3, '•');
-            },                              $output);
+            $output = preg_replace_callback(
+                '/(334 .*?\n.*?: )([^\n:]+)/i',
+                function ($m) {
+                    return $m[1] . $this->obfuscate_pass($m[2]);
+                },
+                $output
+            );
 
             set_site_transient('email_smtp_test_output', sprintf(
                 '<div class="notice notice-%s"><p>%s <code>%s</code></p>%s</div>',
@@ -232,6 +237,19 @@ class EmailSmtp
         exit();
     }
 
+    private function obfuscate_pass(string $pass)
+    {
+        return str_pad('', strlen($pass) * 3, '•');
+    }
+
+    private function obfuscate_config(array &$config)
+    {
+        if (empty($config[self::PROP_PASS])) {
+            return;
+        }
+        $config[self::PROP_PASS] = $this->obfuscate_pass($config[self::PROP_PASS]);
+    }
+
     /**
      * @return string
      */
@@ -242,10 +260,7 @@ class EmailSmtp
 
         // password obfuscation
         foreach ([&$env, &$mailer] as &$config) {
-            if (empty($config[self::PROP_PASS])) {
-                continue;
-            }
-            $config[self::PROP_PASS] = str_pad('', strlen($config[self::PROP_PASS]) * 3, '•');
+            $this->obfuscate_config($config);
         }
 
         $rows = array_filter(
@@ -402,5 +417,27 @@ class EmailSmtp
         }, $args['headers']);
 
         return $args;
+    }
+
+    public function debug_info($debug_info)
+    {
+        $config = $this->get_mailer_config();
+        $this->obfuscate_config($config);
+
+        foreach ($config as $key => $value) {
+            $config[$key] = [
+                'label' => $key,
+                'value' => $value,
+            ];
+            if ($key === 'Password') {
+                $config[$key]['private'] = true;
+            }
+        }
+
+        $debug_info['email-smtp'] = [
+            'label'  => __('PhpMailer', 'email-smtp'),
+            'fields' => $config,
+        ];
+        return $debug_info;
     }
 }
