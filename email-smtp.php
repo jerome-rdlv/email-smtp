@@ -184,8 +184,8 @@ class EmailSmtp
 
             ob_start();
 
-            add_action('phpmailer_init', function ($phpmailer) {
-                $phpmailer->SMTPDebug = 2;
+            add_action('phpmailer_init', function (PHPMailer $phpmailer) {
+                $phpmailer->SMTPDebug = 4;
                 $phpmailer->Timeout = 3;
             });
 
@@ -369,12 +369,14 @@ class EmailSmtp
     /**
      * Overwrite PHPMailer configuration
      */
-    public function phpmailer_init($phpmailer)
+    public function phpmailer_init(PHPMailer $phpmailer)
     {
         /** @var PHPMailer $phpmailer */
         foreach ($this->get_env_config() as $property => $value) {
             $phpmailer->{$property} = $value;
         }
+
+        $phpmailer->Hostname = 'cpe-formations.fr';
     }
 
     public function force_email_recipient($args)
@@ -421,7 +423,8 @@ class EmailSmtp
 
     public function debug_info($debug_info)
     {
-        $config = $this->get_mailer_config();
+        require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+        $config = array_merge(['Version' => PHPMailer::VERSION], $this->get_mailer_config());
         $this->obfuscate_config($config);
 
         foreach ($config as $key => $value) {
@@ -435,7 +438,7 @@ class EmailSmtp
         }
 
         $debug_info['email-smtp'] = [
-            'label'  => __('PhpMailer', 'email-smtp'),
+            'label'  => __('PHPMailer', 'email-smtp'),
             'fields' => $config,
         ];
         return $debug_info;
