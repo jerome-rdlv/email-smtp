@@ -358,7 +358,7 @@ class EmailSmtp
 
         /** @var PHPMailer $phpmailer */
         foreach (self::PHPMAILER_PROPERTIES as $property => $constant) {
-            if (defined($constant) && ($value = constant($constant)) !== null) {
+            if ($constant && defined($constant) && ($value = constant($constant)) !== null) {
                 $config[$property] = $value;
             }
         }
