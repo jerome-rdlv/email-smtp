@@ -1,18 +1,17 @@
-# Copyright (C) 2020 Jérôme Mulsant
+# Copyright (C) 2022 Jérôme Mulsant
 # This file is distributed under the same license as the Email SMTP plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: Email SMTP GIT\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/email-smtp\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-11-13T17:11:45+01:00\n"
+"POT-Creation-Date: 2022-09-15T10:52:43+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: email-smtp\n"
 
 #. Plugin Name of the plugin
@@ -32,61 +31,49 @@ msgstr ""
 msgid "Jérôme Mulsant"
 msgstr ""
 
-#: email-smtp.php:85
-#: email-smtp.php:86
+#: src/EmailSmtp.php:82
+#: src/EmailSmtp.php:83
 msgid "Email &amp; SMTP"
 msgstr ""
 
-#: email-smtp.php:114
-msgid "A plugin is overriding the configuration with these differences:"
-msgstr ""
-
-#. translators: Placeholder is a PHP file
-#: email-smtp.php:131
-msgid "Parameters loaded from %s:"
-msgstr ""
-
-#. translators: Placeholder is a PHP file
-#: email-smtp.php:141
-msgid "No email configuration in %s."
-msgstr ""
-
-#: email-smtp.php:147
-#: email-smtp.php:156
-msgid "Current configuration:"
-msgstr ""
-
-#. translators: Placeholder is a PHP function
-#: email-smtp.php:150
-msgid "PHP %s function."
-msgstr ""
-
 #. translators: %1$s is the defined constant, %2$s is the email address.
-#: email-smtp.php:167
+#: src/EmailSmtp.php:108
 msgid "%1$s is defined: all outgoing messages except test messages will be send to %2$s with no other recipients, nor Cc or Bcc."
 msgstr ""
 
-#: email-smtp.php:181
+#: src/EmailSmtp.php:121
+msgid "A plugin is overriding the environment configuration."
+msgstr ""
+
+#: src/EmailSmtp.php:127
+msgid "Current configuration:"
+msgstr ""
+
+#: src/EmailSmtp.php:135
 msgid "Send a test message:"
 msgstr ""
 
-#: email-smtp.php:185
+#: src/EmailSmtp.php:139
 msgid "Recipient:"
 msgstr ""
 
-#: email-smtp.php:194
+#: src/EmailSmtp.php:148
 msgid "Send"
 msgstr ""
 
-#: email-smtp.php:220
+#: src/EmailSmtp.php:174
 msgid "Email / SMTP test message"
 msgstr ""
 
 #. translators: Placeholder is the website URL
-#: email-smtp.php:223
+#: src/EmailSmtp.php:179
 msgid "Email sending from website %s is working."
 msgstr ""
 
-#: email-smtp.php:242
+#: src/EmailSmtp.php:210
 msgid "Test result:"
+msgstr ""
+
+#: src/EmailSmtp.php:421
+msgid "PHPMailer"
 msgstr ""

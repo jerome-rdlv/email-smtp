@@ -12,6 +12,11 @@
     "require": {
         "php": ">=7.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Rdlv\\WordPress\\EmailSmtp\\": "src/"
+        }
+    },
     "scripts": {
         "post-update-cmd": [
             "wp i18n make-pot . languages/email-smtp.pot"
