@@ -42,8 +42,10 @@ if (!class_exists(EmailSmtp::class)) {
 new EmailSmtp(
     array_map(
         function ($var) {
-            // get env var, and fallback on constant if defined
-            return getenv($var) ?? (defined($var) ? constant($var) : null);
+            // get env var, fallback on constant if defined
+            return ($value = getenv($var)) !== false
+                ? $value
+                : ((defined($var) ? constant($var) : null));
         }, [
                'host' => 'EMAIL_SMTP_HOST',
                'auth' => 'EMAIL_SMTP_AUTH',

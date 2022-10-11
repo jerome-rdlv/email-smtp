@@ -248,7 +248,7 @@ class EmailSmtp
      */
     private function display_config()
     {
-        $mailer = $this->get_mailer_config();
+        $mailer = array_filter($this->get_mailer_config());
         $env = $this->get_env_config();
 
         // password obfuscation
@@ -256,21 +256,17 @@ class EmailSmtp
             $this->obfuscate_config($config);
         }
 
-        $rows = array_filter(
-            array_map(function ($property) use ($env, $mailer) {
-                $values = [
-                        $env[$property] ?? null,
-                        $mailer[$property] ?? null,
-                ];
-                // do not display row if no value at all
-                return array_filter($values)
-                    ? [
-                        'property' => $property,
-                        'values' => $values,
-                    ]
-                    : false;
-            }, array_keys(array_merge($env, $mailer)))
-        );
+        $rows = array_map(function ($property) use ($env, $mailer) {
+            $values = [
+                    $env[$property] ?? null,
+                    $mailer[$property] ?? null,
+            ];
+            // do not display row if no value at all
+            return [
+                'property' => $property,
+                'values' => $values,
+            ];
+        }, array_keys(array_merge($env, $mailer)));
 
         $headers = ['property', 'env', 'phpmailer'];
         !$env && array_splice($headers, 1, 1);
@@ -289,7 +285,7 @@ class EmailSmtp
                     '<tr><th scope="row">%s</th>%s</tr>',
                     $row['property'],
                     implode('', array_map(function ($value) {
-                        return sprintf('<td>%s</td>', $value ? sprintf('<code>%s</code>', $value) : '');
+                        return sprintf('<td>%s</td>', $value ? sprintf('<code>%s</code>', $value) : '-');
                     }, $row['values']))
                 );
             }, $rows))
@@ -368,8 +364,6 @@ class EmailSmtp
         foreach ($this->get_env_config() as $property => $value) {
             $phpmailer->{$property} = $value;
         }
-
-        $phpmailer->Hostname = 'cpe-formations.fr';
     }
 
     public function force_email_recipient($args)
