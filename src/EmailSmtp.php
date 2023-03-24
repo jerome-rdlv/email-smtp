@@ -387,7 +387,7 @@ class EmailSmtp
             $args['headers'] = [];
         }
         if (!is_array($args['headers'])) {
-            $args['headers'] = explode("\n", str_replace("\r\n", "\n", $args['headers']));
+            $args['headers'] = array_filter(explode("\n", str_replace("\r\n", "\n", $args['headers'])));
         }
 
         // move original recipients to headers and replace them
@@ -399,7 +399,7 @@ class EmailSmtp
         // disable To, Cc, Bcc recipients in headers
         $indexes = ['To' => 1, 'Cc' => 1, 'Bcc' => 1];
         $args['headers'] = array_map(function ($header) use (&$indexes) {
-            return preg_replace_callback('/^.*(To|Cc|Bcc):(.*)$/i', function ($m) use (&$indexes) {
+            return preg_replace_callback('/^\s*(To|Cc|Bcc):(.*)$/i', function ($m) use (&$indexes) {
                 $index = $indexes[$m[1]]++;
                 return sprintf("X-DevRewrite-%s:%s", $m[1] . ($index > 1 ? $index : ''), $m[2]);
             },                           $header);

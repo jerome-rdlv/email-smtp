@@ -24,6 +24,8 @@
 
 use Rdlv\WordPress\EmailSmtp\EmailSmtp;
 
+use function Env\env;
+
 // Prevent direct execution.
 if (!defined('ABSPATH')) {
     exit;
@@ -43,7 +45,7 @@ new EmailSmtp(
     array_map(
         function ($var) {
             // get env var, fallback on constant if defined
-            return ($value = getenv($var)) !== false
+            return ($value = env($var)) !== null
                 ? $value
                 : ((defined($var) ? constant($var) : null));
         }, [

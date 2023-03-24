@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "oscarotero/env": "^2.0"
     },
     "autoload": {
         "psr-4": {

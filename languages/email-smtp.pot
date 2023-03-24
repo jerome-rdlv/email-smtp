@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Jérôme Mulsant
+# Copyright (C) 2023 Jérôme Mulsant
 # This file is distributed under the same license as the Email SMTP plugin.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-09-15T10:52:43+02:00\n"
+"POT-Creation-Date: 2023-03-24T17:47:55+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: email-smtp\n"
@@ -31,49 +31,49 @@ msgstr ""
 msgid "Jérôme Mulsant"
 msgstr ""
 
-#: src/EmailSmtp.php:82
-#: src/EmailSmtp.php:83
+#: src/EmailSmtp.php:95
+#: src/EmailSmtp.php:96
 msgid "Email &amp; SMTP"
 msgstr ""
 
-#. translators: %1$s is the defined constant, %2$s is the email address.
-#: src/EmailSmtp.php:108
+#. translators: %1$s is the config key, %2$s is the email address.
+#: src/EmailSmtp.php:121
 msgid "%1$s is defined: all outgoing messages except test messages will be send to %2$s with no other recipients, nor Cc or Bcc."
 msgstr ""
 
-#: src/EmailSmtp.php:121
+#: src/EmailSmtp.php:134
 msgid "A plugin is overriding the environment configuration."
 msgstr ""
 
-#: src/EmailSmtp.php:127
+#: src/EmailSmtp.php:140
 msgid "Current configuration:"
 msgstr ""
 
-#: src/EmailSmtp.php:135
+#: src/EmailSmtp.php:148
 msgid "Send a test message:"
 msgstr ""
 
-#: src/EmailSmtp.php:139
+#: src/EmailSmtp.php:152
 msgid "Recipient:"
 msgstr ""
 
-#: src/EmailSmtp.php:148
+#: src/EmailSmtp.php:161
 msgid "Send"
 msgstr ""
 
-#: src/EmailSmtp.php:174
+#: src/EmailSmtp.php:187
 msgid "Email / SMTP test message"
 msgstr ""
 
 #. translators: Placeholder is the website URL
-#: src/EmailSmtp.php:179
+#: src/EmailSmtp.php:192
 msgid "Email sending from website %s is working."
 msgstr ""
 
-#: src/EmailSmtp.php:210
+#: src/EmailSmtp.php:223
 msgid "Test result:"
 msgstr ""
 
-#: src/EmailSmtp.php:421
+#: src/EmailSmtp.php:428
 msgid "PHPMailer"
 msgstr ""
